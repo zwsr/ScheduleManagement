@@ -13,8 +13,9 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
-    CalendarMap.cpp
+    CalendarMap.cpp \
+    DayButton.cpp
 
-HEADERS  += mainwindow.h \
-    CalendarMap.h
+HEADERS  += \
+    CalendarMap.h \
+    DayButton.h
