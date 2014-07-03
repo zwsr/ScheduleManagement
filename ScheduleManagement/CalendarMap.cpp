@@ -1,20 +1,28 @@
 #include "CalendarMap.h"
+#include "CalendarTranser.h"
+
 const int CalendarMap::month_daynum[] = {
     0,31,28,31,30,31,30,31,31,30,31,30,31
 };
 
-//const QString CalendarMap::weekday_word[7] =
-//{
-//    QObject::tr("日"),QObject::tr("一"),QObject::tr("二"),QObject::tr("三"),QObject::tr("四"),QObject::tr("五"),QObject::tr("六")
-//};
+
+
+const QString CalendarMap::weekday_word[7] =
+{
+    QObject::tr("日"),QObject::tr("一"),QObject::tr("二"),QObject::tr("三"),QObject::tr("四"),QObject::tr("五"),QObject::tr("六")
+};
+
+
 
 CalendarMap::CalendarMap(QWidget *parent) :
     QWidget(parent)
 {
     resize(main_window_width,main_window_height);
-    now_year = 2014;
-    now_month = 6;
+    now_year = init_year;
+    now_month = init_month;
     now_daydum = month_daynum[now_month];
+
+    transer = new CalendarTranser;
 
     QHBoxLayout *first_floor, *second_floor, *third_floor;
     QVBoxLayout *calendarLayout;
@@ -27,17 +35,20 @@ CalendarMap::CalendarMap(QWidget *parent) :
     month_choice_layout = new QGridLayout;
 
 
-    const QString weekday_word[7] =
-    {
-        QObject::tr("日"),QObject::tr("一"),QObject::tr("二"),QObject::tr("三"),QObject::tr("四"),QObject::tr("五"),QObject::tr("六")
-    };
+    //const QString weekday_word[7] =
+    //{
+    //    QObject::tr("日"),QObject::tr("一"),QObject::tr("二"),QObject::tr("三"),QObject::tr("四"),QObject::tr("五"),QObject::tr("六")
+    //};
 
 
 
     for (int i = 0; i <7; i++)
     {
         week_label[i] = new QLabel(this);
-        week_label[i]->setText(weekday_word[i]);
+        QString tmp;
+        tmp = QObject::tr(weekday_word[i].toLatin1().data());
+        week_label[i]->setText(tmp);
+        //week_label[i]->setText(weekday_word[i]);
         third_floor->addWidget(week_label[i],0,Qt::AlignHCenter);
     }
 
@@ -112,7 +123,8 @@ CalendarMap::CalendarMap(QWidget *parent) :
     }
 
     row_i = 0;
-    colum_j = 6;
+    colum_j = transer->getDayOfWeek(now_year,now_month,1);
+
     //colum_j = ToDoFunciton_GetWhichDayOfTheWeek(y,m,d);
     for (int i = 1; i <= month_daynum[now_month];i++)
     {

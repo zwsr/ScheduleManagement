@@ -5,6 +5,11 @@
 #include <QPushButton>
 #include <QLabel>
 #include "DayButton.h"
+#include "CalendarTranser.h"
+
+const int init_year = 2014;
+const int init_month = 7;
+
 
 const int day_button_size = 50;
 const int next_button_size= day_button_size;
@@ -46,6 +51,8 @@ private:
     int now_year;
     int now_daydum;
 
+    class CalendarTranser *transer;
+
 //各种button
 
     class DayButton * day[32];
@@ -61,7 +68,10 @@ private:
 
 
     static const int month_daynum[];
-    //static const QString weekday_word[7];
+    static const QString weekday_word[7];
+
+    //改变year/month后redraw
+    void redraw();
 
     
 };
