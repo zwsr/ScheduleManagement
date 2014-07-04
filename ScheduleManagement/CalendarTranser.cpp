@@ -200,7 +200,13 @@ const QString CalendarTranser::solarFestival[] =
 
 
 
-
+QString CalendarTranser::getLunarString(int y, int m, int d)
+{
+    solar_to_lunar(y,m,d);
+    QString content;
+    content = getWordMonth(lunar_month) + " " + getLunarDay(lunar_day);
+    return content;
+}
 
 
 

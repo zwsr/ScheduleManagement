@@ -18,6 +18,14 @@ public:
         return m_nStr1[m] + "月";
     }
 
+    bool is_leapyear(int year)
+    {
+        if( (year%4==0 &&year%100!=0) || year%400==0 )
+            return true;
+        else
+            return false;
+    }
+
 private:
     int lunar_year;
     int lunar_month;

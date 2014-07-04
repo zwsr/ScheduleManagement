@@ -22,7 +22,7 @@ static const uint qt_meta_data_CalendarMap[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       7,   14, // methods
+       8,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -33,19 +33,20 @@ static const uint qt_meta_data_CalendarMap[] = {
       13,   12,   12,   12, 0x0a,
       27,   12,   12,   12, 0x0a,
       43,   12,   12,   12, 0x0a,
-      58,   12,   12,   12, 0x0a,
-      78,   12,   12,   12, 0x0a,
-     100,   12,   12,   12, 0x0a,
-     119,   12,   12,   12, 0x0a,
+      68,   12,   12,   12, 0x0a,
+      83,   12,   12,   12, 0x0a,
+     103,   12,   12,   12, 0x0a,
+     125,   12,   12,   12, 0x0a,
+     144,   12,   12,   12, 0x0a,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_CalendarMap[] = {
     "CalendarMap\0\0Day_clicked()\0Month_clicked()\0"
-    "Year_clicked()\0NextMonth_clicked()\0"
-    "FowardMonth_clicked()\0NextYear_clicked()\0"
-    "FowardYear_clicked()\0"
+    "SpecifiedMonth_clicked()\0Year_clicked()\0"
+    "NextMonth_clicked()\0FowardMonth_clicked()\0"
+    "NextYear_clicked()\0FowardYear_clicked()\0"
 };
 
 void CalendarMap::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -56,11 +57,12 @@ void CalendarMap::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         switch (_id) {
         case 0: _t->Day_clicked(); break;
         case 1: _t->Month_clicked(); break;
-        case 2: _t->Year_clicked(); break;
-        case 3: _t->NextMonth_clicked(); break;
-        case 4: _t->FowardMonth_clicked(); break;
-        case 5: _t->NextYear_clicked(); break;
-        case 6: _t->FowardYear_clicked(); break;
+        case 2: _t->SpecifiedMonth_clicked(); break;
+        case 3: _t->Year_clicked(); break;
+        case 4: _t->NextMonth_clicked(); break;
+        case 5: _t->FowardMonth_clicked(); break;
+        case 6: _t->NextYear_clicked(); break;
+        case 7: _t->FowardYear_clicked(); break;
         default: ;
         }
     }
@@ -99,9 +101,9 @@ int CalendarMap::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 7)
+        if (_id < 8)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 7;
+        _id -= 8;
     }
     return _id;
 }

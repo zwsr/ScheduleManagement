@@ -24,9 +24,6 @@ CalendarMap::CalendarMap(QWidget *parent) :
 
     transer = new CalendarTranser;
 
-    QHBoxLayout *first_floor, *second_floor, *third_floor;
-    QVBoxLayout *calendarLayout;
-    QGridLayout *detail_daylayout, *month_choice_layout;
     first_floor = new QHBoxLayout;
     second_floor = new QHBoxLayout;
     third_floor = new QHBoxLayout;
@@ -60,6 +57,7 @@ CalendarMap::CalendarMap(QWidget *parent) :
     now_yearbutton->setText(year_content);
     now_yearbutton->setFixedSize(year_button_width,year_button_height);
     now_yearbutton->setFlat(true);
+    connect(now_yearbutton,SIGNAL(clicked()),this,SLOT(Year_clicked()));
 
     now_monthbutton = new QPushButton(this);
     QString month_content;
@@ -68,26 +66,31 @@ CalendarMap::CalendarMap(QWidget *parent) :
     now_monthbutton->setText(month_content);
     now_monthbutton->setFixedSize(month_button_width,month_button_height);
     now_monthbutton->setFlat(true);
+    connect(now_monthbutton,SIGNAL(clicked()),this,SLOT(Month_clicked()));
 
     next_month = new QPushButton(this);
     next_month->setText(">");
     next_month->setFixedSize(next_button_size,next_button_size);
     next_month->setFlat(true);
+    connect(next_month,SIGNAL(clicked()),this,SLOT(NextMonth_clicked()));
 
     forward_month = new QPushButton(this);
     forward_month->setText("<");
     forward_month->setFixedSize(next_button_size,next_button_size);
     forward_month->setFlat(true);
+    connect(forward_month,SIGNAL(clicked()),this,SLOT(FowardMonth_clicked()));
 
     next_year = new QPushButton(this);
     next_year->setText(">");
     next_year->setFixedSize(next_button_size,next_button_size);
     next_year->setFlat(true);
+    connect(next_year,SIGNAL(clicked()),this,SLOT(NextYear_clicked()));
 
     forward_year = new QPushButton(this);
     forward_year->setText("<");
     forward_year->setFixedSize(next_button_size,next_button_size);
     forward_year->setFlat(true);
+    connect(forward_year,SIGNAL(clicked()),this,SLOT(FowardYear_clicked()));
 
     first_floor->addWidget(forward_year);
     first_floor->addWidget(now_yearbutton);
@@ -113,12 +116,14 @@ CalendarMap::CalendarMap(QWidget *parent) :
             row_i++;
             colum_j = 0;
         }
+        connect(month[i],SIGNAL(clicked()),this,SLOT(SpecifiedMonth_clicked()));
         month[i]->hide();
     }
 
     for (int i = 1; i <= 31; i++)
     {
         day[i] = new DayButton(this,now_year,now_month,i);
+        connect(day[i],SIGNAL(clicked()),this,SLOT(Day_clicked()));
         day[i]->hide();
     }
 
@@ -154,38 +159,166 @@ CalendarMap::CalendarMap(QWidget *parent) :
 
 void CalendarMap::Day_clicked()
 {
-
+    //To Do    显示农历
 }
 
 void CalendarMap::Month_clicked()
 {
+    show_monthchoice_map();
+}
 
+void CalendarMap::SpecifiedMonth_clicked()
+{
+    QPushButton* monthbutton = static_cast<QPushButton *>(sender());
+    QString button_content = monthbutton->text();
+    int month = button_content.toInt();
+    now_month = month;
+    show_maincalendar_map();
+    redraw();
+    return;
 }
 
 void CalendarMap::Year_clicked()
 {
+    class YearInputerDialog *dialog;
+    dialog = new YearInputerDialog;
+    dialog->show();
 
+    if (dialog->exec() == QDialog::Accepted)
+    {
+        if ((dialog->getNewYearText()).toInt() != 0)
+        now_year = (dialog->getNewYearText()).toInt();
+        redraw();
+        return;
+    }
+    else
+    {
+    return;
+    }
 }
 
 void CalendarMap::NextMonth_clicked()
 {
+    now_month++;
+    if (now_month == 13)
+    {
+        now_month = 1;
+        now_year++;
+    }
 
+    redraw();
+    return;
 }
 
 void CalendarMap::FowardMonth_clicked()
 {
+    now_month--;
+    if (now_month == 0)
+    {
+        now_month = 12;
+        now_year--;
+    }
 
+    redraw();
+    return;
 }
 
 void CalendarMap::NextYear_clicked()
 {
-
+    now_year++;
+    redraw();
+    return;
 }
 
 void CalendarMap::FowardYear_clicked()
 {
-
+    now_year--;
+    redraw();
+    return;
 }
 
+
+void CalendarMap::redraw()
+{
+    now_daydum = month_daynum[now_month];
+
+    if ((now_month == 2)&&(transer->is_leapyear(now_year)))
+        now_daydum++;
+
+    QString year_content;
+    year_content.setNum(now_year);
+    year_content += QObject::tr("年");
+    now_yearbutton->setText(year_content);
+
+
+    QString month_content;
+    month_content.setNum(now_month);
+    month_content += QObject::tr("月");
+    now_monthbutton->setText(month_content);
+
+    for (int i = 1; i <= 31; i++)
+    {
+        detail_daylayout->removeWidget(day[i]);
+        day[i]->hide();
+    }
+
+    int row_i = 0;
+    int colum_j = transer->getDayOfWeek(now_year,now_month,1);
+
+    for (int i = 1; i <= now_daydum;i++)
+    {
+        day[i]->show();
+        day[i]->set_ymd(now_year,now_month,i);
+
+        detail_daylayout->addWidget(day[i],row_i,colum_j);
+
+        colum_j++;
+        if (colum_j == 7)
+        {
+            colum_j = 0;
+            row_i++;
+        }
+
+    }
+
+    return;
+}
+
+void CalendarMap::show_monthchoice_map()
+{
+    for (int i = 1; i <= 31; i++)
+    {
+        day[i]->hide();
+    }
+    now_monthbutton->hide();
+    now_yearbutton->hide();
+    next_month->hide();
+    forward_month->hide();
+    next_year->hide();
+    forward_year->hide();
+    for (int i = 0; i < 7; i++)
+        week_label[i]->hide();
+
+    for (int i=1; i <= 12; i++)
+        month[i]->show();
+    return;
+}
+
+void CalendarMap::show_maincalendar_map()
+{
+    for (int i=1; i <= 12; i++)
+        month[i]->hide();
+
+    now_monthbutton->show();
+    now_yearbutton->show();
+    next_month->show();
+    forward_month->show();
+    next_year->show();
+    forward_year->show();
+    for (int i = 0; i < 7; i++)
+        week_label[i]->show();
+
+    return;
+}
 
 

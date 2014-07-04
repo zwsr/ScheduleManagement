@@ -6,6 +6,7 @@
 #include <QLabel>
 #include "DayButton.h"
 #include "CalendarTranser.h"
+#include "YearInputerDialog.h"
 
 const int init_year = 2014;
 const int init_month = 7;
@@ -40,6 +41,7 @@ signals:
 public slots:
     void Day_clicked();
     void Month_clicked();
+    void SpecifiedMonth_clicked();
     void Year_clicked();
     void NextMonth_clicked();
     void FowardMonth_clicked();
@@ -70,8 +72,17 @@ private:
     static const int month_daynum[];
     static const QString weekday_word[7];
 
+//各种layout
+
+    QHBoxLayout *first_floor, *second_floor, *third_floor;
+    QVBoxLayout *calendarLayout;
+    QGridLayout *detail_daylayout, *month_choice_layout;
+
     //改变year/month后redraw
     void redraw();
+
+    void show_monthchoice_map();
+    void show_maincalendar_map();
 
     
 };
