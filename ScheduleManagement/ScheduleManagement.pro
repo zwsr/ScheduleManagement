@@ -16,10 +16,12 @@ SOURCES += main.cpp\
     CalendarMap.cpp \
     DayButton.cpp \
     CalendarTranser.cpp \
-    YearInputerDialog.cpp
+    YearInputerDialog.cpp \
+    SqlDb.cpp
 
 HEADERS  += \
     CalendarMap.h \
     DayButton.h \
     CalendarTranser.h \
-    YearInputerDialog.h
+    YearInputerDialog.h \
+    SqlDb.h
