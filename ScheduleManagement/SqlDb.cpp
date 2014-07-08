@@ -4,3 +4,4 @@ SqlDb::SqlDb(QObject *parent) :
     QObject(parent)
 {
 }
+

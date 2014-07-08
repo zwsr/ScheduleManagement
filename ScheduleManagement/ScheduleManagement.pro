@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT += sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -17,11 +18,13 @@ SOURCES += main.cpp\
     DayButton.cpp \
     CalendarTranser.cpp \
     YearInputerDialog.cpp \
-    SqlDb.cpp
+    SqlDb.cpp \
+    Memorandum.cpp
 
 HEADERS  += \
     CalendarMap.h \
     DayButton.h \
     CalendarTranser.h \
     YearInputerDialog.h \
-    SqlDb.h
+    SqlDb.h \
+    Memorandum.h

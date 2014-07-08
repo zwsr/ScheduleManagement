@@ -9,12 +9,14 @@ class SqlDb : public QObject
     Q_OBJECT
 public:
     explicit SqlDb(QObject *parent = 0);
-    void connectDB();
-    void closeDB();
+    //void connectDB();
+    //void closeDB();
     
 signals:
     
 public slots:
+
+private:
     QSqlDatabase db;
     
 };

@@ -66,6 +66,10 @@ private:
     QPushButton* next_year;
     QPushButton* forward_year;
 
+    QPushButton* memorandum_button;
+    QLabel* lunar_date;
+    QLabel* festival_label;
+
     QLabel* week_label[7];
 
 
