@@ -204,11 +204,30 @@ QString CalendarTranser::getLunarString(int y, int m, int d)
 {
     solar_to_lunar(y,m,d);
     QString content;
-    content = getWordMonth(lunar_month) + " " + getLunarDay(lunar_day);
+    content = "农历:" + getWordMonth(lunar_month) + getLunarDay(lunar_day);
     return content;
 }
 
+QString CalendarTranser::getSolarString(int y,int m,int d)
+{
+    QString content;
+    QString tmp,tmp2;
+    tmp.setNum(d);
+    tmp2.setNum(m);
+    content = "今天是:" + tmp2 + "月" + tmp + "号";
+    return content;
+}
 
+QString CalendarTranser::getSolarStringWithYear(int y, int m, int d)
+{
+    QString content;
+    QString tmp,tmp1,tmp2;
+    tmp.setNum(y);
+    tmp1.setNum(m);
+    tmp2.setNum(d);
+    content = "日期:" + tmp + "年" + tmp1 + "月" + tmp2 + "号";
+    return content;
+}
 
 CalendarTranser::CalendarTranser()
 {
@@ -379,6 +398,55 @@ unsigned char CalendarTranser::solar_to_lunar(int kp_year, int kp_month, int kp_
                 }
         }
     }
+}
+
+QString CalendarTranser::getFestival(int m, int d)
+{
+    QString ret = "今天没有节日";
+//    QString month,day;
+//    if (m<10)
+//    {
+//        QString tmp;
+//        tmp.setNum(m);
+//        month = "0" + tmp;
+//    }
+//    else
+//    {
+//        month.setNum(m);
+//    }
+//    if (d<10)
+//    {
+//        QString tmp;
+//        tmp.setNum(d);
+//        month = "0" + tmp;
+//    }
+//    else
+//    {
+//        day.setNum(d);
+//    }
+    int MandD = m * 100 + d + 10000;
+    QString matcher;
+    matcher.setNum(MandD);
+    matcher = matcher.right(4);
+
+    QString to_match;
+    int i = -1;
+
+    do
+    {
+        i++;
+        to_match = solarFestival[i].left(4);
+
+        if ( matcher == to_match)
+        {
+            ret = solarFestival[i];
+            break;
+        }
+    }
+    while ( solarFestival[i] != "1226 毛泽东诞辰纪念日[1893]");
+
+    return ret;
+
 }
 
 

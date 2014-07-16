@@ -181,6 +181,7 @@ DefaultChar=
 Script=
 ConvTable=
 ConvTablePath=%_HOME%\Resource Files\Conversion Tables</a:ModelOptionsText>
+<a:Project.Template>1</a:Project.Template>
 <c:ProjectDiagrams>
 <o:ProjectDiagram Id="o3">
 <a:ObjectID>CDD2D14E-36E1-496A-8BEC-42D36E802397</a:ObjectID>

@@ -1,0 +1,14 @@
+INPUT(
+./debug\main.o
+./debug\CalendarMap.o
+./debug\DayButton.o
+./debug\CalendarTranser.o
+./debug\YearInputerDialog.o
+./debug\SqlDb.o
+./debug\Memorandum.o
+./debug\moc_CalendarMap.o
+./debug\moc_DayButton.o
+./debug\moc_YearInputerDialog.o
+./debug\moc_SqlDb.o
+./debug\moc_Memorandum.o
+);

@@ -12,6 +12,10 @@ public:
     CalendarTranser();
     int getDayOfWeek(int y, int m, int d);
     QString getLunarString(int y,int m, int d);
+    QString getSolarString(int y,int m,int d);
+    QString getSolarStringWithYear(int y, int m ,int d);
+    QString getFestival(int m,int d);
+
 
     QString getWordMonth(int m)
     {

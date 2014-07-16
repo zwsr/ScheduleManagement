@@ -15,10 +15,20 @@ private:
     int day;
 public:
     DayButton(QWidget *parent = 0, int y = 0, int m = 0, int d = 0);
-    void next_month();
-    void next_year();
-    void foward_month();
-    void foward_year();
+
+    int getDay()
+    {
+        return day;
+    }
+    int getMonth()
+    {
+        return month;
+    }
+    int getYear()
+    {
+        return year;
+    }
+
     void set_ymd(int y,int m,int d)
     {
         year = y;
