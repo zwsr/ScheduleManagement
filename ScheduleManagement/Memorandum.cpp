@@ -21,6 +21,7 @@ Memorandum::Memorandum(QWidget *parent, CalendarMap *prt)
     :QWidget(parent)
 
 {
+
     prt_calendarmap = prt;
     date_label = new QLabel(QObject::tr("日期:无"),this);
 
@@ -59,10 +60,13 @@ Memorandum::Memorandum(QWidget *parent, CalendarMap *prt)
     connect(cancel_button,SIGNAL(clicked()),this,SLOT(cancelAdd()));
 
     next_button = new QPushButton(QObject::tr("下一条"),this);
+    next_button->setEnabled(false);
     connect(next_button,SIGNAL(clicked()),this,SLOT(nextMemora()));
 
     previous_button = new QPushButton(QObject::tr("上一条"),this);
+    previous_button->setEnabled(false);
     connect(previous_button,SIGNAL(clicked()),this,SLOT(previousMemora()));
+
 
     edit_button = new QPushButton(QObject::tr("编辑"),this);
     edit_button->setEnabled(true);
@@ -90,15 +94,16 @@ Memorandum::Memorandum(QWidget *parent, CalendarMap *prt)
     QGridLayout* mainlayout = new QGridLayout;
     //mainlayout->addWidget(date_label,0,0,Qt::AlignBottom|Qt::AlignTop);
     //mainlayout->addWidget(selectdate_button,0,2,Qt::AlignBottom|Qt::AlignTop);
-    mainlayout->addWidget(theme_label,0,0,Qt::AlignBottom|Qt::AlignTop);
-    mainlayout->addWidget(theme_input,0,1,Qt::AlignBottom|Qt::AlignTop);
-    mainlayout->addWidget(main_label,1,0,Qt::AlignBottom|Qt::AlignTop);
-    mainlayout->addWidget(maintext_input,1,1,Qt::AlignBottom|Qt::AlignTop);
+    mainlayout->addWidget(theme_label,0,0,Qt::AlignTop);
+    mainlayout->addWidget(theme_input,0,1,Qt::AlignTop);
+    mainlayout->addWidget(main_label,1,0,Qt::AlignTop);
+    mainlayout->addWidget(maintext_input,1,1);
 
     mainlayout->addLayout(rightbutton_layout,1,2);
     mainlayout->addLayout(bottonbutton_layout,3,1);
 
     QVBoxLayout* main_mainlayout;
+    main_mainlayout = new QVBoxLayout;
     main_mainlayout->addLayout(datelayout);
     main_mainlayout->addLayout(mainlayout);
 
@@ -163,7 +168,7 @@ void Memorandum::submitMemora()
         
         //subbmitting to sql
         
-        m_id = prt_calendarmap->pc_db->add_memora();
+        m_id = prt_calendarmap->pc_db->add_memora(theme,maintext,year,month,day);
 
         if ( m_id != 0 )
         {
@@ -243,11 +248,25 @@ void Memorandum::nextMemora()
     //To do with sqlite
     duplicate_to_old();
     if (prt_calendarmap->pc_db->get_next_memora(old_m_id,m_id,theme,maintext,year,month,day))
+        qDebug() << "Get next memora";
+    else
+        qDebug() << "GETNEXTMEMORA ERROR!";
+    redraw();
+    update_interface(NavigationMode);
+    return;
 }
 
 void Memorandum::previousMemora()
 {
     //To do with sqlite
+    duplicate_to_old();
+    if (prt_calendarmap->pc_db->get_previous_memora(old_m_id,m_id,theme,maintext,year,month,day))
+        qDebug() << "Get next memora";
+    else
+        qDebug() << "GETNEXTMEMORA ERROR!";
+    redraw();
+    update_interface(NavigationMode);
+    return;
 }
 
 void Memorandum::editMemora()
@@ -263,6 +282,35 @@ void Memorandum::editMemora()
 void Memorandum::removeMemora()
 {
     //To do with sqlite
+    duplicate_to_old();
+    int button = QMessageBox::question(this,
+                                       QObject::tr("确认删除备忘录"),
+                                       QObject::tr("你确定要删除\"%1\"的备忘录吗?").arg(date_label->text()),
+                                       QMessageBox::Yes|QMessageBox::No);
+
+    if (button == QMessageBox::Yes)
+    {
+        if (!prt_calendarmap->pc_db->delete_memora(old_m_id))
+            qDebug() << " DELETING ERROR!";
+        if (next_button->isEnabled())
+        {
+            nextMemora();
+            return;
+        }
+        else if (previous_button->isEnabled())
+        {
+            previousMemora();
+            return;
+        }
+        else
+        {
+            m_id = 0;
+            year = month = day = m_id;
+            theme = "";
+            maintext = "";
+            redraw();
+        }
+    }
 
     update_interface(NavigationMode);
 }
@@ -303,8 +351,8 @@ void Memorandum::update_interface(Mode mode)
         //to do with sqlite
         edit_button->setEnabled(true);
         remove_button->setEnabled(true);
-        next_button->setEnabled(m_id&prt_calendarmap->pc_db->have_next_memora(m_id));
-        previous_button->setEnabled(m_id&prt_calendarmap->pc_db->have_previous_memora(m_id));
+        next_button->setEnabled(m_id&&prt_calendarmap->pc_db->have_next_memora(m_id));
+        previous_button->setEnabled(m_id&&prt_calendarmap->pc_db->have_previous_memora(m_id));
 
         if (date_label->text() == QObject::tr("日期:无"))
         {
